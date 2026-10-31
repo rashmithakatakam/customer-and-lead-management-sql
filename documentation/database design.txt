@@ -1,0 +1,225 @@
+# Database Design
+## Customer and Lead Management System
+
+### 1. Introduction
+
+The Customer and Lead Management System is a relational database project developed using MySQL.
+
+The database is designed to manage customer information, potential leads, employee assignments, interactions, follow-up activities, and lead status changes.
+
+The system uses six interconnected tables to organize data and maintain referential integrity.
+
+### 2. Database Information
+
+- **Database Name:** `customer_lead_management`
+- **Database Management System:** MySQL
+- **Development Tool:** MySQL Workbench
+- **Database Type:** Relational Database
+- **Total Tables:** 6
+
+### 3. Database Tables
+
+#### Table 1: users
+
+**Purpose:** Stores employee information and roles.
+
+| Column | Data Type | Constraint |
+|---|---|---|
+| user_id | INT | Primary Key, Auto Increment |
+| user_name | VARCHAR(100) | NOT NULL |
+| email | VARCHAR(100) | UNIQUE |
+| role | VARCHAR(30) | NOT NULL, DEFAULT 'Employee' |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+#### Table 2: customers
+
+**Purpose:** Stores registered customer information.
+
+| Column | Data Type | Constraint |
+|---|---|---|
+| customer_id | INT | Primary Key, Auto Increment |
+| customer_name | VARCHAR(100) | NOT NULL |
+| phone | VARCHAR(15) | UNIQUE |
+| email | VARCHAR(100) | UNIQUE |
+| segment | ENUM('Premium','Regular') | NOT NULL, DEFAULT 'Regular' |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+#### Table 3: leads
+
+**Purpose:** Stores potential customer information and lead tracking details.
+
+| Column | Data Type | Constraint |
+|---|---|---|
+| lead_id | INT | Primary Key, Auto Increment |
+| lead_name | VARCHAR(100) | NOT NULL |
+| phone | VARCHAR(15) | — |
+| email | VARCHAR(100) | — |
+| source | VARCHAR(50) | — |
+| status | ENUM('New','Contacted','Qualified','Converted','Lost') | NOT NULL, DEFAULT 'New' |
+| assigned_to | INT | Foreign Key |
+| customer_id | INT | Foreign Key, UNIQUE |
+| created_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+**Foreign Keys:**
+
+- `assigned_to` references `users(user_id)`
+- `customer_id` references `customers(customer_id)`
+
+#### Table 4: interactions
+
+**Purpose:** Stores communication records between employees and leads.
+
+| Column | Data Type | Constraint |
+|---|---|---|
+| interaction_id | INT | Primary Key, Auto Increment |
+| lead_id | INT | Foreign Key, NOT NULL |
+| user_id | INT | Foreign Key, NOT NULL |
+| interaction_type | ENUM('Call','Email','Meeting') | NOT NULL |
+| notes | TEXT | — |
+| interaction_date | DATETIME | DEFAULT CURRENT_TIMESTAMP |
+
+**Foreign Keys:**
+
+- `lead_id` references `leads(lead_id)`
+- `user_id` references `users(user_id)`
+
+#### Table 5: lead_status_history
+
+**Purpose:** Maintains a history of lead status changes.
+
+| Column | Data Type | Constraint |
+|---|---|---|
+| history_id | INT | Primary Key, Auto Increment |
+| lead_id | INT | Foreign Key, NOT NULL |
+| old_status | VARCHAR(30) | — |
+| new_status | VARCHAR(30) | NOT NULL |
+| changed_by | INT | Foreign Key, NOT NULL |
+| changed_at | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP |
+
+**Foreign Keys:**
+
+- `lead_id` references `leads(lead_id)`
+- `changed_by` references `users(user_id)`
+
+#### Table 6: follow_ups
+
+**Purpose:** Stores scheduled follow-up activities for leads.
+
+| Column | Data Type | Constraint |
+|---|---|---|
+| follow_up_id | INT | Primary Key, Auto Increment |
+| lead_id | INT | Foreign Key, NOT NULL |
+| assigned_to | INT | Foreign Key, NOT NULL |
+| due_date | DATETIME | NOT NULL |
+| status | ENUM('Pending','Completed','Cancelled') | NOT NULL, DEFAULT 'Pending' |
+| notes | TEXT | — |
+
+**Foreign Keys:**
+
+- `lead_id` references `leads(lead_id)`
+- `assigned_to` references `users(user_id)`
+
+### 4. Database Relationships
+
+| Parent Table | Child Table | Relationship |
+|---|---|---|
+| users | leads | One-to-Many |
+| customers | leads | Optional One-to-One |
+| leads | interactions | One-to-Many |
+| users | interactions | One-to-Many |
+| leads | lead_status_history | One-to-Many |
+| users | lead_status_history | One-to-Many |
+| leads | follow_ups | One-to-Many |
+| users | follow_ups | One-to-Many |
+
+The `customers` and `leads` relationship is optional because `leads.customer_id` can be NULL. Its UNIQUE constraint prevents multiple leads from referencing the same customer.
+
+### 5. Primary Keys and Foreign Keys
+
+**Primary Keys:**
+
+- users → user_id
+- customers → customer_id
+- leads → lead_id
+- interactions → interaction_id
+- lead_status_history → history_id
+- follow_ups → follow_up_id
+
+**Foreign Keys:**
+
+The database contains eight foreign-key relationships connecting employees, customers, leads, interactions, status history, and follow-ups.
+
+These relationships help prevent invalid references between records.
+
+### 6. Database Normalization
+
+The database is designed using normalization principles.
+
+**First Normal Form (1NF):** Each table contains atomic values and has a primary key.
+
+**Second Normal Form (2NF):** The tables use single-column primary keys, and no partial dependencies have been identified.
+
+**Third Normal Form (3NF):** Employee, customer, lead, interaction, status-history, and follow-up details are maintained in separate tables to reduce unnecessary duplication.
+
+The design is intended to follow 3NF, assuming the stated business rules and functional dependencies.
+
+### 7. Database Constraints
+
+The following constraints are implemented:
+
+- **PRIMARY KEY:** Uniquely identifies each record.
+- **FOREIGN KEY:** Establishes relationships between tables.
+- **UNIQUE:** Prevents duplicate values in selected columns.
+- **NOT NULL:** Requires a value for mandatory fields.
+- **DEFAULT:** Assigns predefined values when appropriate.
+- **ENUM:** Restricts values to predefined categories.
+- **AUTO_INCREMENT:** Automatically generates numeric identifiers.
+
+### 8. Database Operations
+
+The system supports:
+
+1. Registering customers
+2. Registering leads
+3. Assigning leads to employees
+4. Updating lead statuses
+5. Converting leads into customers
+6. Recording customer interactions
+7. Scheduling follow-up activities
+8. Updating follow-up statuses
+9. Maintaining lead status history
+10. Generating business reports
+
+### 9. Advanced Database Features
+
+**Views:** Simplify frequently used queries and reports.
+
+**Stored Procedures:** Perform reusable database operations such as adding customers, registering leads, and updating lead statuses.
+
+**Stored Functions:** Return calculated values such as customer counts, lead counts, and conversion rates.
+
+**Triggers:** Automate selected validations and history tracking.
+
+**Indexes:** Support efficient searching, filtering, and reporting.
+
+**Transactions:** Help maintain consistency through COMMIT, ROLLBACK, and SAVEPOINT operations.
+
+### 10. Data Integrity
+
+The database uses primary keys, foreign keys, unique constraints, and validation rules to maintain consistent data.
+
+Examples include:
+
+- Preventing duplicate customer email addresses.
+- Preventing invalid employee references.
+- Restricting lead statuses to defined values.
+- Maintaining relationships between leads and follow-ups.
+- Recording lead status changes through triggers.
+
+### 11. Conclusion
+
+The Customer and Lead Management System uses a relational database design consisting of six interconnected tables.
+
+The design supports customer registration, lead tracking, employee assignments, interaction management, follow-up scheduling, and business reporting.
+
+It demonstrates database design, normalization, relationships, constraints, and advanced MySQL concepts.

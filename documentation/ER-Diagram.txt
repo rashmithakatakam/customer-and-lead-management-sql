@@ -1,0 +1,85 @@
+           CUSTOMER AND LEAD MANAGEMENT SYSTEM
+                     ER DIAGRAM
+
+
++-------------------------+
+|          USERS          |
++-------------------------+
+| PK  user_id             |
+|     user_name           |
+|     email (UNIQUE)      |
+|     role                |
+|     created_at          |
++-------------------------+
+             |
+             | 1
+             |
+             | M
+             v
++-------------------------+          +-------------------------+
+|          LEADS          |          |        CUSTOMERS        |
++-------------------------+          +-------------------------+
+| PK  lead_id             |          | PK  customer_id         |
+|     lead_name           |          |     customer_name       |
+|     phone               |          |     phone (UNIQUE)      |
+|     email               |          |     email (UNIQUE)      |
+|     source              |          |     segment             |
+|     status              |          |     created_at          |
+| FK  assigned_to         |          +-------------------------+
+| FK  customer_id (UNIQUE)|                       |
+|     created_at          |<----------------------+
++-------------------------+       0..1 : 0..1
+             |
+             |
+       +-----+----------------------+------------------+
+       |                            |                  |
+       | 1                          | 1                | 1
+       |                            |                  |
+       | M                          | M                | M
+       v                            v                  v
++---------------------+  +----------------------+  +---------------------+
+|    INTERACTIONS     |  | LEAD_STATUS_HISTORY  |  |     FOLLOW_UPS      |
++---------------------+  +----------------------+  +---------------------+
+| PK interaction_id   |  | PK history_id        |  | PK follow_up_id     |
+| FK lead_id          |  | FK lead_id           |  | FK lead_id          |
+| FK user_id          |  |     old_status       |  | FK assigned_to      |
+|    interaction_type |  |     new_status       |  |    due_date         |
+|    notes            |  | FK changed_by        |  |    status           |
+|    interaction_date |  |    changed_at        |  |    notes            |
++---------------------+  +----------------------+  +---------------------+
+
+
+ADDITIONAL RELATIONSHIPS
+------------------------
+
+USERS (1) -------- (M) INTERACTIONS
+    users.user_id = interactions.user_id
+
+USERS (1) -------- (M) LEAD_STATUS_HISTORY
+    users.user_id = lead_status_history.changed_by
+
+USERS (1) -------- (M) FOLLOW_UPS
+    users.user_id = follow_ups.assigned_to
+
+
+RELATIONSHIP SUMMARY
+--------------------
+
+1. USERS     (1) ---- (M) LEADS
+2. CUSTOMERS (0..1) - (0..1) LEADS
+3. LEADS     (1) ---- (M) INTERACTIONS
+4. USERS     (1) ---- (M) INTERACTIONS
+5. LEADS     (1) ---- (M) LEAD_STATUS_HISTORY
+6. USERS     (1) ---- (M) LEAD_STATUS_HISTORY
+7. LEADS     (1) ---- (M) FOLLOW_UPS
+8. USERS     (1) ---- (M) FOLLOW_UPS
+
+
+LEGEND
+------
+
+PK   = Primary Key
+FK   = Foreign Key
+1    = One
+M    = Many
+0..1 = Zero or One

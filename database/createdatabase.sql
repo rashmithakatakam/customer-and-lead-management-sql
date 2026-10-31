@@ -1,0 +1,3 @@
+CREATE DATABASE customer_lead_management;
+
+USE customer_lead_management;

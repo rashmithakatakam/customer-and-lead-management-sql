@@ -1,0 +1,400 @@
+# Project Requirements Document
+
+## Customer and Lead Management System
+
+### 1. Project Introduction
+
+The Customer and Lead Management System is a database project developed using MySQL.
+
+The main purpose of this project is to manage customer information, track potential leads, assign leads to employees, record interactions, schedule follow-ups, and monitor lead conversions.
+
+The system uses a relational database consisting of six interconnected tables.
+
+## 2. Problem Statement
+
+Organizations often manage customer information, sales leads, employee assignments, and follow-up activities using multiple spreadsheets or manual records.
+
+This approach can result in:
+
+- Duplicate customer information
+- Difficulty tracking lead statuses
+- Missed follow-up activities
+- Poor coordination between employees
+- Difficulty maintaining interaction history
+- Time-consuming report generation
+
+The Customer and Lead Management System addresses these problems by organizing related information in a centralized MySQL database.
+
+## 3. Project Objectives
+
+The main objectives are:
+
+1. Store and manage customer details.
+2. Register and track potential leads.
+3. Assign leads to employees.
+4. Track lead statuses from registration to conversion.
+5. Record calls, emails, and meetings.
+6. Schedule and manage follow-up activities.
+7. Maintain lead status history.
+8. Convert leads into registered customers.
+9. Generate useful business reports.
+10. Maintain data integrity using database constraints.
+11. Improve query performance through indexing.
+12. Demonstrate advanced SQL concepts.
+
+## 4. Technologies Required
+
+| Component | Technology |
+|---|---|
+| Database | MySQL |
+| Database Management Tool | MySQL Workbench |
+| Query Language | SQL |
+| Database Model | Relational Database |
+| Operating System | Windows |
+| Documentation | Markdown / Notepad |
+
+## 5. Functional Requirements
+
+### FR01 — Employee Management
+
+The system shall store employee details in the `users` table.
+
+It shall support:
+
+- Adding employee information
+- Storing employee names and email addresses
+- Assigning employee roles
+- Retrieving employee details
+- Identifying employees responsible for leads
+
+### FR02 — Customer Management
+
+The system shall maintain customer information.
+
+It shall support:
+
+- Registering customers
+- Storing customer names, phone numbers, and email addresses
+- Classifying customers as Premium or Regular
+- Searching customer records
+- Updating customer information
+- Preventing duplicate customer phone numbers and email addresses
+
+### FR03 — Lead Management
+
+The system shall manage potential customers using the `leads` table.
+
+It shall support:
+
+- Registering new leads
+- Recording lead contact information
+- Recording lead sources
+- Assigning leads to employees
+- Updating lead statuses
+- Retrieving leads based on their status
+- Linking converted leads to customer records
+
+Supported lead statuses:
+
+- New
+- Contacted
+- Qualified
+- Converted
+- Lost
+
+### FR04 — Interaction Management
+
+The system shall record communication activities between employees and leads.
+
+Supported interaction types:
+
+- Call
+- Email
+- Meeting
+
+Each interaction shall store:
+
+- Interaction ID
+- Lead ID
+- Employee ID
+- Interaction type
+- Notes
+- Interaction date
+
+### FR05 — Lead Status History
+
+The system shall maintain records of lead status changes.
+
+Each history record shall contain:
+
+- History ID
+- Lead ID
+- Previous status
+- New status
+- Responsible employee ID
+- Date and time of change
+
+Triggers shall be used to automatically record selected status changes.
+
+### FR06 — Follow-Up Management
+
+The system shall manage follow-up activities.
+
+It shall support:
+
+- Scheduling follow-ups
+- Assigning follow-ups to employees
+- Recording follow-up dates
+- Adding follow-up notes
+- Marking follow-ups as Completed
+- Cancelling follow-ups
+- Retrieving pending and overdue follow-ups
+
+Supported follow-up statuses:
+
+- Pending
+- Completed
+- Cancelled
+
+### FR07 — Lead Conversion
+
+The system shall support converting leads into customers.
+
+The conversion process shall:
+
+1. Identify the lead.
+2. Create a corresponding customer record when required.
+3. Link the lead to the customer.
+4. Update the lead status to Converted.
+5. Maintain data consistency using a transaction.
+
+### FR08 — Data Retrieval and Search
+
+The system shall support SQL queries using:
+
+- SELECT
+- WHERE
+- DISTINCT
+- ORDER BY
+- LIMIT
+- LIKE
+- BETWEEN
+- IN
+- NOT IN
+- IS NULL
+- IS NOT NULL
+
+### FR09 — Business Reporting
+
+The system shall generate reports including:
+
+1. Total customers
+2. Total leads
+3. Lead status summary
+4. Lead conversion rate
+5. Monthly lead registrations
+6. Monthly customer registrations
+7. Employee-wise assigned leads
+8. Employee-wise converted leads
+9. Lead source performance
+10. Pending follow-ups
+11. Overdue follow-ups
+12. Customer segmentation
+13. Interaction type summary
+14. Leads with the highest interactions
+15. Overall business summary
+
+### FR10 — Advanced SQL Operations
+
+The project shall demonstrate:
+
+- Joins
+- Subqueries
+- Aggregate functions
+- GROUP BY
+- HAVING
+- CASE
+- COALESCE
+- UNION
+- Views
+- Stored procedures
+- Stored functions
+- Triggers
+- Indexes
+- Transactions
+
+## 6. Non-Functional Requirements
+
+### NFR01 — Data Integrity
+
+The database shall use primary keys, foreign keys, unique constraints, and validation rules to maintain consistent data.
+
+### NFR02 — Performance
+
+Indexes shall be created on selected columns to support efficient searching and reporting.
+
+Query execution plans shall be examined using EXPLAIN.
+
+### NFR03 — Reliability
+
+Transactions shall be used for operations involving multiple related database changes.
+
+COMMIT and ROLLBACK shall help preserve consistency.
+
+### NFR04 — Maintainability
+
+The project shall organize SQL scripts into separate files for database creation, tables, sample data, queries, views, procedures, functions, triggers, indexes, transactions, and reports.
+
+### NFR05 — Scalability
+
+The relational design should support increasing numbers of customers, leads, interactions, and follow-up records.
+
+Performance must be evaluated as the database grows.
+
+### NFR06 — Usability
+
+SQL scripts shall be organized and documented so they can be executed and understood using MySQL Workbench.
+
+### NFR07 — Security
+
+The database should restrict access to authorized users and protect customer information.
+
+Production use would require appropriate database permissions, secure credentials, and access controls. These features are not fully implemented in the current SQL-only project.
+
+## 7. Database Requirements
+
+The database shall contain six tables:
+
+| Table | Purpose |
+|---|---|
+| users | Stores employee information |
+| customers | Stores registered customers |
+| leads | Stores potential customers |
+| interactions | Records communications |
+| lead_status_history | Tracks lead status changes |
+| follow_ups | Manages follow-up activities |
+
+Each table shall have a primary key.
+
+Foreign keys shall be used to establish relationships between related tables.
+
+## 8. Database Constraints
+
+The system shall use the following constraints:
+
+**PRIMARY KEY:** Uniquely identifies each record.
+
+**FOREIGN KEY:** Establishes relationships between tables.
+
+**UNIQUE:** Prevents duplicate values in selected columns.
+
+**NOT NULL:** Ensures mandatory fields contain values.
+
+**DEFAULT:** Provides default values where applicable.
+
+**ENUM:** Restricts certain columns to predefined values.
+
+**AUTO_INCREMENT:** Generates unique numeric identifiers.
+
+## 9. Database Normalization Requirements
+
+The database shall be designed according to normalization principles:
+
+**1NF:** Store atomic values and avoid repeating groups.
+
+**2NF:** Eliminate partial dependencies.
+
+**3NF:** Eliminate problematic transitive dependencies.
+
+Normalization helps reduce data duplication and maintain consistency.
+
+## 10. Sample Data Requirements
+
+The database shall contain sufficient sample records to demonstrate its features.
+
+Sample data should include:
+
+- Employees with different roles
+- Premium and Regular customers
+- Leads with different statuses
+- Leads assigned to different employees
+- Calls, emails, and meetings
+- Lead status-history records
+- Pending, Completed, and Cancelled follow-ups
+
+The project blueprint calls for representative master and transaction data to demonstrate relationships and SQL operations.
+
+## 11. Testing Requirements
+
+The system shall be tested to verify:
+
+1. All six tables are created successfully.
+2. Primary keys and foreign keys work correctly.
+3. Sample records are inserted successfully.
+4. SQL queries return expected results.
+5. Views execute successfully.
+6. Stored procedures perform the intended operations.
+7. Stored functions return correct values.
+8. Triggers execute when their conditions are met.
+9. Indexes are created successfully.
+10. Transactions support COMMIT and ROLLBACK.
+11. Business reports return correct results.
+12. Invalid data is rejected where validation rules apply.
+13. Converted leads are linked to customer records.
+
+## 12. Expected Outcomes
+
+After successful implementation, the project should provide:
+
+- A centralized relational database
+- Organized customer and lead information
+- Employee assignment tracking
+- Interaction history
+- Follow-up management
+- Lead conversion tracking
+- Automated database operations
+- Business reporting capabilities
+- Demonstration of basic and advanced MySQL concepts
+
+## 13. Project Deliverables
+
+The final project shall include:
+
+- Database creation SQL script
+- Table creation SQL script
+- Sample data SQL script
+- SQL query collection
+- Views
+- Stored procedures
+- Stored functions
+- Triggers
+- Indexes
+- Transaction examples
+- Business reporting queries
+- ER diagram
+- Database design documentation
+- Requirements documentation
+- README file
+- Final testing script
+
+## 14. Future Enhancements
+
+Possible future enhancements include:
+
+- Python and MySQL integration
+- Web-based user interface
+- Authentication and role-based authorization
+- Automated follow-up reminders
+- Power BI reporting dashboard
+- Email notifications
+- Advanced lead analytics
+
+These are proposed enhancements, not features implemented in the current database-only version.
+
+## 15. Conclusion
+
+The Customer and Lead Management System is designed to provide an organized database solution for managing customers, leads, employee assignments, interactions, and follow-ups.
+
+The project demonstrates relational database design, normalization, SQL queries, stored procedures, functions, triggers, transactions, indexing, and business reporting.
+
+Successful implementation and testing will provide practical experience in MySQL database development.
