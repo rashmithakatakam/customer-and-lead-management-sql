@@ -199,3 +199,4 @@ FROM customers
 GROUP BY segment;
 SELECT *
 FROM customer_segment_report;
+

@@ -84,3 +84,4 @@ CREATE TABLE follow_ups (
     FOREIGN KEY (lead_id) REFERENCES leads(lead_id),
     FOREIGN KEY (assigned_to) REFERENCES users(user_id)
 );
+show tables;
